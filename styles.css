@@ -1,15 +1,23 @@
 /* Estilo general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 20px;
 }
 
 .container {
     width: 100%;
-    max-width: 1200px; /* Máximo ancho */
-    margin: 50px auto; /* Centrado con margen superior */
+    max-width: 1200px; /* Limita el ancho máximo del contenedor */
     padding: 30px;
     background-color: #fff;
     border-radius: 10px;
@@ -19,10 +27,11 @@ body {
     gap: 20px;
 }
 
+/* Estilo del título */
 h1 {
     text-align: center;
     color: #333;
-    font-size: 2rem; /* Tamaño más pequeño en pantallas grandes */
+    font-size: 2.5rem; /* Ajusta el tamaño del título */
 }
 
 /* Estilo del formulario */
@@ -298,23 +307,29 @@ button.pay-now:hover {
     }
 
     h1 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
-    input[type="text"], input[type="date"], input[type="number"], select {
+    form input, form select {
         padding: 8px;
+        font-size: 14px;
     }
 
     button {
         width: 100%;
+        font-size: 14px;
     }
 
-    .input-group input, .input-group select {
-        padding: 8px;
+    table, .table-payments {
+        font-size: 14px;
     }
 
-    table {
-        font-size: 0.9rem;
+    .edit-form {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-form {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -326,17 +341,38 @@ button.pay-now:hover {
 
     button {
         padding: 8px;
+        font-size: 14px;
     }
 
     .container {
-        padding: 5px;
+        padding: 10px;
+    }
+}
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 1200px) {
+    .container {
+        padding: 40px;
     }
 
     h1 {
-        font-size: 1.2rem;
+        font-size: 3.5rem;
     }
 
-    .input-group input, .input-group select {
-        font-size: 0.9rem;
+    form input, form select {
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 18px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .edit-form, .payment-form {
+        width: 100%;
+        max-width: 1200px; /* Limita el ancho en pantallas grandes */
     }
 }
