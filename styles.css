@@ -16,8 +16,7 @@ body {
 }
 
 .container {
-    width: 100%;
-    max-width: 1200px; /* Mantener un ancho máximo en pantallas grandes */
+    width: 100%; /* Aseguramos que ocupe el 100% del ancho disponible */
     padding: 30px;
     background-color: #fff;
     border-radius: 10px;
@@ -355,6 +354,7 @@ button.pay-now:hover {
 @media (min-width: 1200px) {
     .container {
         padding: 40px;
+        width: 100%; /* Asegura que ocupe todo el ancho disponible */
     }
 
     h1 {
@@ -375,6 +375,5 @@ button.pay-now:hover {
 
     .edit-form, .payment-form {
         width: 100%;
-        max-width: 1200px; /* Limita el ancho en pantallas grandes */
     }
 }
