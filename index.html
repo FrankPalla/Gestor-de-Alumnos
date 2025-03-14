@@ -50,6 +50,10 @@
             <button type="submit" class="btn">➕ Agregar Alumno</button>
         </form>
 
+        <!-- Alertas de éxito/error -->
+        <div class="alert success" id="successMessage" style="display:none;">Estudiante agregado exitosamente.</div>
+        <div class="alert error" id="errorMessage" style="display:none;">Hubo un error al agregar el estudiante.</div>
+
         <!-- Tabla de estudiantes -->
         <div class="table-container">
             <table>
@@ -67,16 +71,41 @@
                 <tbody id="studentList"></tbody>
             </table>
         </div>
+
+        <!-- Sección de Pagos -->
+        <h2>💰 Gestión de Pagos</h2>
+        <table class="table-payments">
+            <thead>
+                <tr>
+                    <th>Estudiante</th>
+                    <th class="payment-col amount">Monto</th>
+                    <th class="payment-col due-date">Fecha de vencimiento</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsTable"></tbody>
+        </table>
+
+        <!-- Formulario de pagos -->
+        <div class="payment-form">
+            <input type="text" id="paymentStudent" placeholder="Nombre del estudiante" required>
+            <input type="number" id="paymentAmount" placeholder="Monto del pago" required>
+            <input type="date" id="paymentDueDate" placeholder="Fecha de vencimiento" required>
+            <button type="submit" id="payButton">Registrar Pago</button>
+        </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const studentForm = document.getElementById("studentForm");
             const studentList = document.getElementById("studentList");
+            const paymentsTable = document.getElementById("paymentsTable");
             let students = JSON.parse(localStorage.getItem("students")) || [];
+            let payments = JSON.parse(localStorage.getItem("payments")) || [];
 
             function saveToLocalStorage() {
                 localStorage.setItem("students", JSON.stringify(students));
+                localStorage.setItem("payments", JSON.stringify(payments));
             }
 
             function displayStudents() {
@@ -102,6 +131,22 @@
                         </td>
                     `;
                     studentList.appendChild(row);
+                });
+            }
+
+            function displayPayments() {
+                paymentsTable.innerHTML = "";
+                payments.forEach(payment => {
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${payment.studentName}</td>
+                        <td>${payment.amount.toFixed(2)}</td>
+                        <td>${payment.dueDate}</td>
+                        <td>
+                            <button class="delete" onclick="deletePayment(${payment.studentName})">❌</button>
+                        </td>
+                    `;
+                    paymentsTable.appendChild(row);
                 });
             }
 
@@ -157,7 +202,7 @@
                         <td>${student.name}</td>
                         <td>${student.phone}</td>
                         <td>${student.entryDate}</td>
-                        <td class="payment-date ${isPaymentOverdue ? 'overdue' : ''}">${student.paymentDate}</td>
+                        <td class="payment-date">${student.paymentDate}</td>
                         <td>${student.attentionDetail}</td>
                         <td>${student.price.toFixed(2)}</td>
                         <td>
@@ -209,8 +254,39 @@
                 subjectField.style.display = (supportType === "Materia puntual") ? "block" : "none";
             };
 
+            // Función para registrar el pago de un estudiante
+            document.getElementById("payButton").addEventListener("click", function(event) {
+                event.preventDefault();
+
+                let studentName = document.getElementById("paymentStudent").value.trim();
+                let amount = parseFloat(document.getElementById("paymentAmount").value);
+                let dueDate = document.getElementById("paymentDueDate").value;
+
+                if (!studentName || amount <= 0 || !dueDate) {
+                    alert("Por favor, completa todos los campos correctamente.");
+                    return;
+                }
+
+                let payment = { studentName, amount, dueDate };
+                payments.push(payment);
+                saveToLocalStorage();
+                displayPayments();
+
+                document.getElementById("paymentStudent").value = "";
+                document.getElementById("paymentAmount").value = "";
+                document.getElementById("paymentDueDate").value = "";
+            });
+
+            // Función para eliminar un pago
+            window.deletePayment = function(studentName) {
+                payments = payments.filter(payment => payment.studentName !== studentName);
+                saveToLocalStorage();
+                displayPayments();
+            };
+
             window.onload = () => {
                 displayStudents();
+                displayPayments();
             };
         });
     </script>
