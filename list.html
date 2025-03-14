@@ -1,0 +1,98 @@
+<!DOCTYPE  html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Built with jdoodle.ai - Lista completa de alumnos y resumen financiero">
+    <meta property="og:description" content="Built with jdoodle.ai - Lista completa de alumnos y resumen financiero">
+    <meta property="og:title" content="Lista de Alumnos - Sistema de Gestión">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1503676260728-1c00da09c228">
+    <title>Lista de Alumnos - Sistema de Gestión</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TpUUqDnYQcchQnSyIijhKFYtgobQVWnUwufQLmjQkKS6OgmvBwY/FqoOLs64OroIg+AHi6OSk6CIl/i8ptIj14Lgf7+497t4BQqPCVLNrAlA1y0jFY2I2tyoGXuHHCPohICgxU0+kFzPwHF/38PH1LsqzvM/9OXqVvMkAn0g8x3TDIt4gntm0dM77xGFWkhTic+Jxgy5I/Mh12eU3zkWHBZ4ZNjKpeeIwsVjsYLmDWclQiaeJI4qqUb6QdVnhvMVZrdRY6578haG8tpLmOs1hxLGEBJIQIaOGMiqwEKVVI8VEivZjHv4hx58kl0yuMhg5FlCFCsnxg//B727NwtSkmxSMAd0vtv0xCgR2gWbdtr+Pbbt5AvifgSut7a82gNlP0uttLXIE9G0DF9dtTd4DLneAwSddMiRH8tMUCgXg/Yy+KQcM3AI9a25vrX2cPgAZ6mr5Bjg4BMaKlL3u8e5gZ2//nmn19wMlnHKIZEbk1QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+QIDwgMGJWV8SIA
+AAHjSURBVFjD7ZY9aBRBFMd/s3cb5LgYkqjBKghqOEKKgEjiB1qJINiIjRa2oo2VIgRBsBAEtRKxUlRQrEIUg1oJfiGKnPiBGhM1HiQmucR4H7u7M2PhxbCsd7lbxDAP/pTz5v3ezL+ZN28EUgIoAUUVl6QOFEPGhvQH1jHgBkJMAXnAkwCK6sdnzwApoAwsNBtGFTgFGI0I2IAQQiPWE/ovQP6vAHQRWH1YZ/qtyWBlBrN1gsrrO0xM2+TmvWZVzLiytExe1RX1jlPcDJ4AyVXr0A0DpE1djd63Q+gu4OJbLFBKlSh9fAJAYfUeT/2UXrL7wT5uPa8v4OHkLJfvVtit+1xb7rDPSqKnJnlz7jL5DfsW2MnQKO6qDKsPPQTg1acGT9cnONVf5e7+LNtbFNyeR4xt3kXy4iVSQrA0b6GZEiW3hA0HQdgO6Jl0bE9KfF+iaxJfSaQEy5H8qEkGRr4wemwvD3e08vx6Bx2PFO8/1/lec/F9H2U4tPm+oCWpcXpgjJeXUxyMR2kBRkcqaIEgYwjGh6d4lm3nXNvMutmzQyVgNm+BDoxOw+V4KsLizhQPKtO8mK4x1JfFlxI3EIQD2GoIM3DgqxJdaOimgS/ETNi12l6Xqc/d0b8d4f8t+efdkV0BbwxRIIIQtoqL0lZxAG5YeHlUeGm/AAAAAElFTkSuQmCC">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="nav-bar">
+                <a href="index.html" class="nav-link">← Volver a Gestión</a>
+                <h1>📊 Lista Completa de Alumnos</h1>
+            </nav>
+            <div class="summary-box">
+                <div class="summary-item">
+                    <h3>Total de Alumnos</h3>
+                    <p id="totalStudents">0</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Ingresos Mensuales</h3>
+                    <p id="monthlyIncome">$0</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Pagos Pendientes</h3>
+                    <p id="pendingPayments">0</p>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="Buscar alumno..." class="search-input">
+                <select id="filterType" class="filter-select">
+                    <option value="all">Todos los alumnos</option>
+                    <option value="pending">Pagos pendientes</option>
+                    <option value="upcoming">Próximos a vencer</option>
+                    <option value="overdue">Pagos vencidos</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>Estado</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Tipo de Apoyo</th>
+                            <th>Último Pago</th>
+                            <th>Próximo Pago</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para marcar pago -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2>Registrar Pago</h2>
+            <form id="paymentForm">
+                <input type="hidden" id="studentId">
+                <div class="form-group">
+                    <label for="paymentDate">Fecha de Pago:</label>
+                    <input type="date" id="paymentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="nextPaymentDate">Próxima Fecha de Pago:</label>
+                    <input type="date" id="nextPaymentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentAmount">Monto:</label>
+                    <input type="number" id="paymentAmount" step="0.01" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Registrar Pago</button>
+                    <button type="button" class="btn-secondary" onclick="closePaymentModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="list.js"></script>
+</body>
+</html>
+ 
