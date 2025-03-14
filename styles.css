@@ -16,16 +16,13 @@ body {
 }
 
 .container {
-    width: 100%; /* Aseguramos que ocupe el 100% del ancho disponible */
+    width: 100vw;        /* Ocupa el 100% del ancho de la ventana */
     padding: 30px;
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin: 0 auto; /* Centrado horizontal */
-    overflow: hidden;
+    /* Puedes quitar border-radius o box-shadow si no te conviene en pantallas grandes */
+    /* border-radius: 10px; */
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+    /* Elimina el margin auto para que no se centre en un ancho fijo */
 }
 
 /* Estilo del título */
