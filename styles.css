@@ -25,6 +25,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    margin: 0 auto; /* Centra el contenedor */
+    overflow: hidden; /* Evita que el contenido se desborde */
 }
 
 /* Estilo del título */
