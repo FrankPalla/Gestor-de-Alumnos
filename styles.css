@@ -1,0 +1,214 @@
+/* Reset de márgenes */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo global */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #81d4fa, #64b5f6); /* Azul claro */
+    color: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centrado en el medio de la pantalla */
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    background-size: 400% 400%;
+    animation: gradientAnimation 8s ease infinite;
+    overflow: hidden; /* Elimina barras de desplazamiento */
+}
+
+/* Animación de gradiente */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Contenedor principal */
+.container {
+    width: 100%;
+    max-width: 900px;
+    height: 100%; /* Asegura que ocupe toda la altura disponible */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    margin-top: 20px;
+    transform: scale(0.98);
+    animation: fadeIn 1s ease-out;
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Título principal */
+h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #0277bd; /* Azul tranquilo */
+    margin-bottom: 15px;
+}
+
+/* Barra de búsqueda */
+input[type="text"] {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #81d4fa; /* Azul claro */
+    border-radius: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Campos de entrada */
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 1rem;
+    color: #0277bd; /* Azul tranquilo */
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #81d4fa; /* Azul claro */
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #0288d1; /* Azul un poco más oscuro */
+}
+
+/* Botón */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0288d1; /* Azul tranquilo */
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0277bd; /* Azul más oscuro */
+}
+
+/* Tabla de alumnos */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    font-size: 1rem;
+}
+
+table th {
+    background-color: #0288d1; /* Azul tranquilo */
+    color: white;
+    border-radius: 10px;
+}
+
+table td {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+button.edit, button.delete {
+    padding: 6px 12px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    transition: background-color 0.3s;
+    margin: 2px 5px;
+}
+
+button.edit {
+    background-color: #0288d1; /* Azul tranquilo */
+}
+
+button.edit:hover {
+    background-color: #0277bd; /* Azul más oscuro */
+}
+
+button.delete {
+    background-color: #f44336; /* Rojo */
+}
+
+button.delete:hover {
+    background-color: #d32f2f; /* Rojo oscuro */
+}
+
+/* Resaltar alumnos con pagos vencidos */
+tr.overdue {
+    background-color: #ffcccc !important; /* Rojo claro */
+    color: #d32f2f !important; /* Rojo oscuro */
+    font-weight: bold;
+}
+
+/* Medidas responsivas */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+        margin-bottom: 10px;
+    }
+}
+
+/* Al final del archivo CSS */
+.overdue {
+    background-color: #f8d7da; /* Color de fondo rojo */
+    color: #721c24; /* Color del texto en rojo oscuro */
+    font-weight: bold; /* Poner en negrita */
+}

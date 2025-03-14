@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Alumnos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Gestión de Alumnos</h1>
+
+        <!-- Barra de búsqueda -->
+        <input type="text" id="search" placeholder="Buscar alumno..." oninput="searchStudent()">
+
+        <!-- Formulario para agregar/editando estudiantes -->
+        <form id="studentForm">
+            <div class="input-group">
+                <label for="name">👤 Nombre del Alumno:</label>
+                <input type="text" id="name" placeholder="Ej: Juan Pérez" required>
+            </div>
+            <div class="input-group">
+                <label for="phone">📞 Teléfono:</label>
+                <input type="text" id="phone" placeholder="Ej: 123456789" required>
+            </div>
+            <div class="input-group">
+                <label for="entryDate">📅 Fecha de Ingreso:</label>
+                <input type="date" id="entryDate" required>
+            </div>
+            <div class="input-group">
+                <label for="paymentDate">💰 Fecha de Pago:</label>
+                <input type="date" id="paymentDate" required>
+            </div>
+            <div class="input-group">
+                <label for="supportType">📖 Tipo de Atención:</label>
+                <select id="supportType" required onchange="toggleSubjectField()">
+                    <option value="">Seleccionar...</option>
+                    <option value="Apoyo escolar">Apoyo Escolar</option>
+                    <option value="Materia puntual">Materia Puntual</option>
+                </select>
+            </div>
+            <div class="input-group" id="subjectField" style="display: none;">
+                <label for="subject">📚 Materia a Enseñar:</label>
+                <input type="text" id="subject" placeholder="Ej: Matemáticas">
+            </div>
+            <div class="input-group">
+                <label for="price">💲 Precio:</label>
+                <input type="number" id="price" placeholder="Ej: 1500" required>
+            </div>
+            <button type="submit" class="btn">➕ Agregar Alumno</button>
+        </form>
+
+        <!-- Tabla de estudiantes -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Fecha de Ingreso</th>
+                        <th>Fecha de Pago</th>
+                        <th>Tipo de Atención</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const studentForm = document.getElementById("studentForm");
+            const studentList = document.getElementById("studentList");
+            let students = JSON.parse(localStorage.getItem("students")) || [];
+
+            function saveToLocalStorage() {
+                localStorage.setItem("students", JSON.stringify(students));
+            }
+
+            function displayStudents() {
+                studentList.innerHTML = "";
+                students.forEach((student, index) => {
+                    let row = document.createElement("tr");
+
+                    // Compara la fecha de pago con la fecha actual
+                    const currentDate = new Date();
+                    const paymentDate = new Date(student.paymentDate);
+                    const isPaymentOverdue = paymentDate < currentDate;
+
+                    row.innerHTML = `
+                        <td>${student.name}</td>
+                        <td>${student.phone}</td>
+                        <td>${student.entryDate}</td>
+                        <td class="payment-date ${isPaymentOverdue ? 'overdue' : ''}">${student.paymentDate}</td>
+                        <td>${student.attentionDetail}</td>
+                        <td>${student.price.toFixed(2)}</td>
+                        <td>
+                            <button class="edit" onclick="editStudent(${index})">✏️</button>
+                            <button class="delete" onclick="deleteStudent(${index})">❌</button>
+                        </td>
+                    `;
+                    studentList.appendChild(row);
+                });
+            }
+
+            // Función para eliminar un estudiante
+            window.deleteStudent = function(index) {
+                students.splice(index, 1);
+                saveToLocalStorage();
+                displayStudents();
+            };
+
+            // Función para editar un estudiante
+            window.editStudent = function(index) {
+                const student = students[index];
+                document.getElementById("name").value = student.name;
+                document.getElementById("phone").value = student.phone;
+                document.getElementById("entryDate").value = student.entryDate;
+                document.getElementById("paymentDate").value = student.paymentDate;
+                document.getElementById("supportType").value = student.attentionDetail;
+                document.getElementById("price").value = student.price;
+                document.getElementById("subject").value = student.subject || "";
+
+                studentForm.onsubmit = function(event) {
+                    event.preventDefault();
+                    students[index] = {
+                        name: document.getElementById("name").value,
+                        phone: document.getElementById("phone").value,
+                        entryDate: document.getElementById("entryDate").value,
+                        paymentDate: document.getElementById("paymentDate").value,
+                        attentionDetail: document.getElementById("supportType").value,
+                        price: parseFloat(document.getElementById("price").value),
+                        subject: document.getElementById("subject").value
+                    };
+                    saveToLocalStorage();
+                    displayStudents();
+                    studentForm.reset();
+                };
+            };
+
+            // Función para filtrar estudiantes por búsqueda
+            window.searchStudent = function() {
+                const query = document.getElementById("search").value.toLowerCase();
+                const filteredStudents = students.filter(student => 
+                    student.name.toLowerCase().includes(query)
+                );
+                displayFilteredStudents(filteredStudents);
+            };
+
+            function displayFilteredStudents(filteredStudents) {
+                studentList.innerHTML = "";
+                filteredStudents.forEach((student, index) => {
+                    let row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${student.name}</td>
+                        <td>${student.phone}</td>
+                        <td>${student.entryDate}</td>
+                        <td class="payment-date ${isPaymentOverdue ? 'overdue' : ''}">${student.paymentDate}</td>
+                        <td>${student.attentionDetail}</td>
+                        <td>${student.price.toFixed(2)}</td>
+                        <td>
+                            <button class="edit" onclick="editStudent(${index})">✏️</button>
+                            <button class="delete" onclick="deleteStudent(${index})">❌</button>
+                        </td>
+                    `;
+                    studentList.appendChild(row);
+                });
+            }
+
+            // Guardar el nuevo estudiante
+            studentForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                let name = document.getElementById("name").value.trim();
+                let phone = document.getElementById("phone").value.trim();
+                let entryDate = document.getElementById("entryDate").value;
+                let paymentDate = document.getElementById("paymentDate").value;
+                let supportType = document.getElementById("supportType").value;
+                let subject = document.getElementById("subject").value.trim();
+                let price = parseFloat(document.getElementById("price").value) || 0;
+
+                if (!name || !phone || !entryDate || !paymentDate || !supportType || price <= 0) {
+                    alert("Por favor, completa todos los campos correctamente.");
+                    return;
+                }
+
+                if (supportType === "Materia puntual" && !subject) {
+                    alert("Por favor, ingresa la materia a enseñar.");
+                    return;
+                }
+
+                let attentionDetail = (supportType === "Materia puntual") ? `${supportType} (${subject})` : supportType;
+
+                let student = { name, phone, entryDate, paymentDate, attentionDetail, price };
+                students.push(student);
+                saveToLocalStorage();
+                displayStudents();
+
+                studentForm.reset();
+                toggleSubjectField(); // Oculta el campo de materia si es necesario
+            });
+
+            // Mostrar u ocultar el campo de materia según el tipo de atención
+            window.toggleSubjectField = function() {
+                const supportType = document.getElementById("supportType").value;
+                const subjectField = document.getElementById("subjectField");
+                subjectField.style.display = (supportType === "Materia puntual") ? "block" : "none";
+            };
+
+            window.onload = () => {
+                displayStudents();
+            };
+        });
+    </script>
+</body>
+</html>
