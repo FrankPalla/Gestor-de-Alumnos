@@ -17,7 +17,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1200px; /* Limita el ancho máximo del contenedor */
+    max-width: 2400px; /* Limita el ancho máximo del contenedor */
     padding: 30px;
     background-color: #fff;
     border-radius: 10px;
