@@ -1,294 +1,149 @@
-<!DOCTYPE html>
+<!DOCTYPE  html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Alumnos</title>
+    <meta name="description" content="Built with jdoodle.ai - Sistema de gestión de alumnos con funcionalidades de seguimiento de pagos y materias">
+    <meta property="og:description" content="Built with jdoodle.ai - Sistema de gestión de alumnos con funcionalidades de seguimiento de pagos y materias">
+    <meta property="og:title" content="Sistema de Gestión de Alumnos">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1509062522246-3755977927d7">
+    <title>Sistema de Gestión de Alumnos</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>📚 Gestión de Alumnos</h1>
+        <header class="main-header">
+            <nav class="nav-bar">
+                <div class="nav-brand">
+                    <h1>📚 Sistema de Gestión de Alumnos</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="list.html" class="nav-link">Ver Lista Completa 📋</a>
+                </div>
+            </nav>
+            
+            <div class="dashboard">
+                <div class="stat-card">
+                    <h3>Total Alumnos</h3>
+                    <p id="totalStudents">0</p>
+                    <span class="icon">👥</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Ingresos Mensuales</h3>
+                    <p id="monthlyIncome">$0</p>
+                    <span class="icon">💰</span>
+                </div>
+                <div class="stat-card warning">
+                    <h3>Pagos Pendientes</h3>
+                    <p id="pendingPayments">0</p>
+                    <span class="icon">⚠️</span>
+                </div>
+            </div>
 
-        <!-- Barra de búsqueda -->
-        <input type="text" id="search" placeholder="Buscar alumno..." oninput="searchStudent()">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar alumno..." class="search-input">
+            </div>
+        </header>
 
-        <!-- Formulario para agregar/editando estudiantes -->
-        <form id="studentForm">
-            <div class="input-group">
-                <label for="name">👤 Nombre del Alumno:</label>
-                <input type="text" id="name" placeholder="Ej: Juan Pérez" required>
-            </div>
-            <div class="input-group">
-                <label for="phone">📞 Teléfono:</label>
-                <input type="text" id="phone" placeholder="Ej: 123456789" required>
-            </div>
-            <div class="input-group">
-                <label for="entryDate">📅 Fecha de Ingreso:</label>
-                <input type="date" id="entryDate" required>
-            </div>
-            <div class="input-group">
-                <label for="paymentDate">💰 Fecha de Pago:</label>
-                <input type="date" id="paymentDate" required>
-            </div>
-            <div class="input-group">
-                <label for="supportType">📖 Tipo de Atención:</label>
-                <select id="supportType" required onchange="toggleSubjectField()">
-                    <option value="">Seleccionar...</option>
-                    <option value="Apoyo escolar">Apoyo Escolar</option>
-                    <option value="Materia puntual">Materia Puntual</option>
-                </select>
-            </div>
-            <div class="input-group" id="subjectField" style="display: none;">
-                <label for="subject">📚 Materia a Enseñar:</label>
-                <input type="text" id="subject" placeholder="Ej: Matemáticas">
-            </div>
-            <div class="input-group">
-                <label for="price">💲 Precio:</label>
-                <input type="number" id="price" placeholder="Ej: 1500" required>
-            </div>
-            <button type="submit" class="btn">➕ Agregar Alumno</button>
-        </form>
+        <main>
+            <form id="studentForm" class="student-form card">
+                <h2>Registrar Nuevo Alumno</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">👤 Nombre:</label>
+                        <input type="text" id="name" required>
+                    </div>
 
-        <!-- Alertas de éxito/error -->
-        <div class="alert success" id="successMessage" style="display:none;">Estudiante agregado exitosamente.</div>
-        <div class="alert error" id="errorMessage" style="display:none;">Hubo un error al agregar el estudiante.</div>
+                    <div class="form-group">
+                        <label for="phone">📞 Teléfono:</label>
+                        <input type="tel" id="phone" required>
+                    </div>
 
-        <!-- Tabla de estudiantes -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Teléfono</th>
-                        <th>Fecha de Ingreso</th>
-                        <th>Fecha de Pago</th>
-                        <th>Tipo de Atención</th>
-                        <th>Precio</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="studentList"></tbody>
-            </table>
-        </div>
+                    <div class="form-group">
+                        <label for="entryDate">📅 Fecha de Ingreso:</label>
+                        <input type="date" id="entryDate" required>
+                    </div>
 
-        <!-- Sección de Pagos -->
-        <h2>💰 Gestión de Pagos</h2>
-        <table class="table-payments">
-            <thead>
-                <tr>
-                    <th>Estudiante</th>
-                    <th class="payment-col amount">Monto</th>
-                    <th class="payment-col due-date">Fecha de vencimiento</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody id="paymentsTable"></tbody>
-        </table>
+                    <div class="form-group">
+                        <label for="paymentDate">💰 Fecha de Pago:</label>
+                        <input type="date" id="paymentDate" required>
+                    </div>
 
-        <!-- Formulario de pagos -->
-        <div class="payment-form">
-            <input type="text" id="paymentStudent" placeholder="Nombre del estudiante" required>
-            <input type="number" id="paymentAmount" placeholder="Monto del pago" required>
-            <input type="date" id="paymentDueDate" placeholder="Fecha de vencimiento" required>
-            <button type="submit" id="payButton">Registrar Pago</button>
+                    <div class="form-group">
+                        <label for="supportType">📖 Tipo de Apoyo:</label>
+                        <select id="supportType" required>
+                            <option value="Apoyo escolar">Apoyo Escolar</option>
+                            <option value="Materia puntual">Materia Puntual</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="subjectGroup">
+                        <label for="subject">📚 Materia:</label>
+                        <input type="text" id="subject">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">💲 Precio:</label>
+                        <input type="number" id="price" required min="0" step="0.01">
+                    </div>
+
+                    <div class="form-group span-2">
+                        <label for="notes">📝 Notas:</label>
+                        <textarea id="notes" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Guardar Alumno</button>
+            </form>
+
+            <section class="students-section card">
+                <h2>Alumnos Recientes</h2>
+                <div class="table-container">
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <th>Estado</th>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Próximo Pago</th>
+                                <th>Tipo de Apoyo</th>
+                                <th>Precio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content card">
+            <h2>💰 Registrar Pago</h2>
+            <form id="paymentForm">
+                <input type="hidden" id="studentId">
+                <div class="form-group">
+                    <label for="paymentDate">📅 Fecha de Pago:</label>
+                    <input type="date" id="modalPaymentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="nextPaymentDate">📅 Próxima Fecha de Pago:</label>
+                    <input type="date" id="nextPaymentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentAmount">💲 Monto:</label>
+                    <input type="number" id="paymentAmount" step="0.01" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Confirmar</button>
+                    <button type="button" class="btn-secondary" onclick="closePaymentModal()">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const studentForm = document.getElementById("studentForm");
-            const studentList = document.getElementById("studentList");
-            const paymentsTable = document.getElementById("paymentsTable");
-            let students = JSON.parse(localStorage.getItem("students")) || [];
-            let payments = JSON.parse(localStorage.getItem("payments")) || [];
-
-            function saveToLocalStorage() {
-                localStorage.setItem("students", JSON.stringify(students));
-                localStorage.setItem("payments", JSON.stringify(payments));
-            }
-
-            function displayStudents() {
-                studentList.innerHTML = "";
-                students.forEach((student, index) => {
-                    let row = document.createElement("tr");
-
-                    // Compara la fecha de pago con la fecha actual
-                    const currentDate = new Date();
-                    const paymentDate = new Date(student.paymentDate);
-                    const isPaymentOverdue = paymentDate < currentDate;
-
-                    row.innerHTML = `
-                        <td>${student.name}</td>
-                        <td>${student.phone}</td>
-                        <td>${student.entryDate}</td>
-                        <td class="payment-date ${isPaymentOverdue ? 'overdue' : ''}">${student.paymentDate}</td>
-                        <td>${student.attentionDetail}</td>
-                        <td>${student.price.toFixed(2)}</td>
-                        <td>
-                            <button class="edit" onclick="editStudent(${index})">✏️</button>
-                            <button class="delete" onclick="deleteStudent(${index})">❌</button>
-                        </td>
-                    `;
-                    studentList.appendChild(row);
-                });
-            }
-
-            function displayPayments() {
-                paymentsTable.innerHTML = "";
-                payments.forEach(payment => {
-                    let row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${payment.studentName}</td>
-                        <td>${payment.amount.toFixed(2)}</td>
-                        <td>${payment.dueDate}</td>
-                        <td>
-                            <button class="delete" onclick="deletePayment(${payment.studentName})">❌</button>
-                        </td>
-                    `;
-                    paymentsTable.appendChild(row);
-                });
-            }
-
-            // Función para eliminar un estudiante
-            window.deleteStudent = function(index) {
-                students.splice(index, 1);
-                saveToLocalStorage();
-                displayStudents();
-            };
-
-            // Función para editar un estudiante
-            window.editStudent = function(index) {
-                const student = students[index];
-                document.getElementById("name").value = student.name;
-                document.getElementById("phone").value = student.phone;
-                document.getElementById("entryDate").value = student.entryDate;
-                document.getElementById("paymentDate").value = student.paymentDate;
-                document.getElementById("supportType").value = student.attentionDetail;
-                document.getElementById("price").value = student.price;
-                document.getElementById("subject").value = student.subject || "";
-
-                studentForm.onsubmit = function(event) {
-                    event.preventDefault();
-                    students[index] = {
-                        name: document.getElementById("name").value,
-                        phone: document.getElementById("phone").value,
-                        entryDate: document.getElementById("entryDate").value,
-                        paymentDate: document.getElementById("paymentDate").value,
-                        attentionDetail: document.getElementById("supportType").value,
-                        price: parseFloat(document.getElementById("price").value),
-                        subject: document.getElementById("subject").value
-                    };
-                    saveToLocalStorage();
-                    displayStudents();
-                    studentForm.reset();
-                };
-            };
-
-            // Función para filtrar estudiantes por búsqueda
-            window.searchStudent = function() {
-                const query = document.getElementById("search").value.toLowerCase();
-                const filteredStudents = students.filter(student => 
-                    student.name.toLowerCase().includes(query)
-                );
-                displayFilteredStudents(filteredStudents);
-            };
-
-            function displayFilteredStudents(filteredStudents) {
-                studentList.innerHTML = "";
-                filteredStudents.forEach((student, index) => {
-                    let row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${student.name}</td>
-                        <td>${student.phone}</td>
-                        <td>${student.entryDate}</td>
-                        <td class="payment-date">${student.paymentDate}</td>
-                        <td>${student.attentionDetail}</td>
-                        <td>${student.price.toFixed(2)}</td>
-                        <td>
-                            <button class="edit" onclick="editStudent(${index})">✏️</button>
-                            <button class="delete" onclick="deleteStudent(${index})">❌</button>
-                        </td>
-                    `;
-                    studentList.appendChild(row);
-                });
-            }
-
-            // Guardar el nuevo estudiante
-            studentForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-
-                let name = document.getElementById("name").value.trim();
-                let phone = document.getElementById("phone").value.trim();
-                let entryDate = document.getElementById("entryDate").value;
-                let paymentDate = document.getElementById("paymentDate").value;
-                let supportType = document.getElementById("supportType").value;
-                let subject = document.getElementById("subject").value.trim();
-                let price = parseFloat(document.getElementById("price").value) || 0;
-
-                if (!name || !phone || !entryDate || !paymentDate || !supportType || price <= 0) {
-                    alert("Por favor, completa todos los campos correctamente.");
-                    return;
-                }
-
-                if (supportType === "Materia puntual" && !subject) {
-                    alert("Por favor, ingresa la materia a enseñar.");
-                    return;
-                }
-
-                let attentionDetail = (supportType === "Materia puntual") ? `${supportType} (${subject})` : supportType;
-
-                let student = { name, phone, entryDate, paymentDate, attentionDetail, price };
-                students.push(student);
-                saveToLocalStorage();
-                displayStudents();
-
-                studentForm.reset();
-                toggleSubjectField(); // Oculta el campo de materia si es necesario
-            });
-
-            // Mostrar u ocultar el campo de materia según el tipo de atención
-            window.toggleSubjectField = function() {
-                const supportType = document.getElementById("supportType").value;
-                const subjectField = document.getElementById("subjectField");
-                subjectField.style.display = (supportType === "Materia puntual") ? "block" : "none";
-            };
-
-            // Función para registrar el pago de un estudiante
-            document.getElementById("payButton").addEventListener("click", function(event) {
-                event.preventDefault();
-
-                let studentName = document.getElementById("paymentStudent").value.trim();
-                let amount = parseFloat(document.getElementById("paymentAmount").value);
-                let dueDate = document.getElementById("paymentDueDate").value;
-
-                if (!studentName || amount <= 0 || !dueDate) {
-                    alert("Por favor, completa todos los campos correctamente.");
-                    return;
-                }
-
-                let payment = { studentName, amount, dueDate };
-                payments.push(payment);
-                saveToLocalStorage();
-                displayPayments();
-
-                document.getElementById("paymentStudent").value = "";
-                document.getElementById("paymentAmount").value = "";
-                document.getElementById("paymentDueDate").value = "";
-            });
-
-            // Función para eliminar un pago
-            window.deletePayment = function(studentName) {
-                payments = payments.filter(payment => payment.studentName !== studentName);
-                saveToLocalStorage();
-                displayPayments();
-            };
-
-            window.onload = () => {
-                displayStudents();
-                displayPayments();
-            };
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
+ 
