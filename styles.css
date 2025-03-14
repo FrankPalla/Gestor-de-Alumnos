@@ -212,3 +212,66 @@ tr.overdue {
     color: #721c24; /* Color del texto en rojo oscuro */
     font-weight: bold; /* Poner en negrita */
 }
+
+/* Tabla de alumnos con animación */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeInTable 1s ease-in-out; /* Animación de entrada */
+}
+
+@keyframes fadeInTable {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Botones con efecto de hover más atractivo */
+button.edit:hover, button.delete:hover {
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
+}
+
+/* Mejora de la barra de búsqueda */
+input[type="text"] {
+    background-color: #fafafa;
+    border: 2px solid #0288d1;
+    border-radius: 10px;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+input[type="text"]:focus {
+    background-color: #e3f2fd; /* Fondo azul suave al enfocarse */
+    border-color: #01579b;
+}
+
+/* Mejorar la apariencia de los formularios en dispositivos móviles */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .input-group {
+        margin-bottom: 10px;
+    }
+
+    input[type="text"], input[type="date"], select {
+        padding: 8px;
+    }
+}
